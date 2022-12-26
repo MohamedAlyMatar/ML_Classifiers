@@ -164,8 +164,6 @@ def IntegerConversionFunction(character):
         return 1
     elif (character == '#'):
         return 2
-    elif (character == '\n'):
-        return 0
 
 
 def convertToInteger(data):

@@ -1,84 +1,21 @@
 # importing modules
 from samples import *
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-def read_lines2(filepath, n):
-    result = []
-    with open(filepath, 'r', encoding='utf-8') as file:
-        # for 28 sample
-        for sample in range(n):
-            # for 28 rows
-            # init the arr for the new line/row
-            arr = []
-            for row in range(28):
-                # for each 28 char
-                for ch in range(28):
-                    # read by character
-                    char = file.read(1)
-                    # check if it is a char or not
-                    if not char:
-                        break
-                    arr.append(IntegerConversionFunction(char))
-            result.append(arr)
-    result = np.array(result)
-    print(result.shape)
-    return result
-
-
-# 5000x784
-def read2(filename, n):
-    with open(filename, 'r') as file:
-        result = []
-        lines = file.readlines()
-        for sample in range(n):
-            data = []
-            for row in range(28):
-                for col in range(28):
-                    data.append(convertToInteger(lines[row][col]))
-            result.append(data)
-    return np.array(result)
-
-
-def read(filename, n):
-    with open(filename, 'r') as file:
-        result = []
-        lines = file.readlines()
-        for sample in range(n):
-            datumn = []
-            for row in range(28):
-                data = []
-                for col in range(28):
-                    data.append(convertToInteger(lines[row][col]))
-                datumn.append(data)
-            result.append(datumn)
-    return np.array(result)
-
-
-def read_lines(filepath):
-    result = []
-    training_digits = []
-
-    with open(filepath, 'r', encoding='utf-8') as file:
-        # for 28 image
-        for letter in range(28):
-            # for 28 rows
-            for row in range(28):
-                # init the arr for the new line/row
-                arr = []
-                # for each 28 char
-                for ch in range(28):
-                    # read by character
-                    char = file.read(1)
-                    # check if it is a char or not
-                    if not char:
-                        break
-                    arr.append(IntegerConversionFunction(char))
-                training_digits.extend(arr)
-            result.append(training_digits)
-    result = np.array(result)
-    print(result.shape)
-    return result
+# function for visualizing the data
+def visualize(x, y, n, d1, d2):
+    for i in range(n):
+        label = y[i]
+        pixels = x[i]
+        pixels = np.array(pixels, dtype='uint8')
+        pixels = pixels.reshape(d1, d2)
+        ax = plt.subplot(1, 9, i + 1)
+        ax = plt.imshow(pixels, cmap='gray')
+        plt.title('{label}'.format(label=label))
+        plt.plot()
+    plt.show()
 
 
 def read_labels(filepath):
@@ -92,5 +29,32 @@ def read_labels(filepath):
     return arr
 
 
-# print(read_lines2('data/digitdata/trainingimages', 5000))
-# read_labels("data/digitdata/traininglabels")
+# 5000x28x28
+def read_lines(filepath, n):
+    arr = []
+    result = []
+    training_digits = []
+    row_count = 0
+    with open(filepath, 'r', encoding='utf-8') as file:
+        # for each 28 char
+        for line in file:
+            for char in line:
+                # arr.append(IntegerConversionFunction(char))
+                if char == ' ':
+                    arr.append(int(0))
+                elif char == '+':
+                    arr.append(int(1))
+                elif char == '#':
+                    arr.append(int(2))
+            training_digits.append(arr)
+            # init the arr for the new line/row
+            arr = []
+            row_count = row_count + 1
+            if row_count == n:
+                row_count = 0
+                result.append(training_digits)
+                # init the arr for the new line/row
+                training_digits = []
+        result = np.array(result)
+    print(result.shape)
+    return result
