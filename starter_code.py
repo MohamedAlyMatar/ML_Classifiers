@@ -11,7 +11,7 @@ def visualize(x, y, n, d1, d2):
         pixels = x[i]
         pixels = np.array(pixels, dtype='uint8')
         pixels = pixels.reshape(d1, d2)
-        ax = plt.subplot(1, 9, i + 1)
+        ax = plt.subplot(1, n, i + 1)
         ax = plt.imshow(pixels, cmap='gray')
         plt.title('{label}'.format(label=label))
         plt.plot()
