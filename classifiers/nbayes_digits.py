@@ -21,35 +21,35 @@ print(flat_x_train.shape)
 flat_x_test = x_test.reshape(1000, 784)
 print(flat_x_test.shape)
 
-# create a gaussian model and fit
-# GNB = GaussianNB()
-# GNB.fit(flat_x_train, y_train)
-# y_predict = GNB.predict(flat_x_test)
+#create a gaussian model and fit
+GNB = GaussianNB()
+GNB.fit(flat_x_train, y_train)
+y_predict = GNB.predict(flat_x_test)
 
-# Model Accuracy
-# print("Accuracy:", metrics.accuracy_score(y_test, y_predict))
+#Model Accuracy
+print("Accuracy:", metrics.accuracy_score(y_test, y_predict))
 
-# visualize first 9
-# visualize(x_train, y_train, 9, 28, 28)
+#visualize first 9
+visualize(x_test, y_predict, 9, 28, 28)
 
 # Compare between models
-GNB=GaussianNB()
-BNB = BernoulliNB()
-MNB = MultinomialNB()
-ComNB = ComplementNB()
-
-
-accuracy=[]
-predictions=[]
-for model in [GNB,BNB,MNB,ComNB]:
-    model.fit(flat_x_train,y_train)
-    Y_predict=model.predict(flat_x_test)
-    accuracy.append(metrics.accuracy_score(y_test,Y_predict))
-
-models=["Gaussian","Bernoulli","Multinomial","Complement"]
-plt.plot(models,accuracy)
-plt.title("Naive Bayes Model Comparison")
-plt.show()
+# GNB=GaussianNB()
+# BNB = BernoulliNB()
+# MNB = MultinomialNB()
+# ComNB = ComplementNB()
+#
+#
+# accuracy=[]
+# predictions=[]
+# for model in [GNB,BNB,MNB,ComNB]:
+#     model.fit(flat_x_train,y_train)
+#     Y_predict=model.predict(flat_x_test)
+#     accuracy.append(metrics.accuracy_score(y_test,Y_predict))
+#
+# models=["Gaussian","Bernoulli","Multinomial","Complement"]
+# plt.plot(models,accuracy)
+# plt.title("Naive Bayes Model Comparison")
+# plt.show()
 
 
 
