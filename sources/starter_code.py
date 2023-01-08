@@ -1,5 +1,5 @@
 # importing modules
-from samples import *
+from sources.samples import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -29,32 +29,33 @@ def read_labels(filepath):
     return arr
 
 
-# 5000x28x28
+# read lines character by character
 def read_lines(filepath, n):
-    arr = []
+    chars = []
+    rows = []
     result = []
-    training_digits = []
     row_count = 0
     with open(filepath, 'r', encoding='utf-8') as file:
         # for each 28 char
         for line in file:
             for char in line:
-                # arr.append(IntegerConversionFunction(char))
+                # chars.append(IntegerConversionFunction(char))
                 if char == ' ':
-                    arr.append(int(0))
+                    chars.append(int(0))
                 elif char == '+':
-                    arr.append(int(1))
+                    chars.append(int(1))
                 elif char == '#':
-                    arr.append(int(2))
-            training_digits.append(arr)
-            # init the arr for the new line/row
-            arr = []
+                    chars.append(int(2))
+            rows.append(chars)
+            # clear the chars for the new line/row
+            chars = []
             row_count = row_count + 1
             if row_count == n:
                 row_count = 0
-                result.append(training_digits)
-                # init the arr for the new line/row
-                training_digits = []
+                result.append(rows)
+                # clear the rows for the new sample
+                rows = []
         result = np.array(result)
-    print(result.shape)
+    # print shape to verify
+    print("original data shape", result.shape)
     return result
