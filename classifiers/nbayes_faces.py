@@ -1,4 +1,4 @@
-from starter_code import *
+from sources.starter_code import *
 from sklearn.naive_bayes import GaussianNB
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.naive_bayes import BernoulliNB

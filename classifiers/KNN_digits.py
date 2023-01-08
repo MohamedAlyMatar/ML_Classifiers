@@ -1,5 +1,5 @@
 ################################### imports ##################################################
-from starter_code import *
+from sources.starter_code import *
 from sklearn.neighbors import KNeighborsClassifier
 
 
