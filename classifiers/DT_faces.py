@@ -149,7 +149,8 @@ def randomforest():
 
 
 def main():
-    randomforest()
+    model = combination()
+    visualize(x_test, model.predict(flat_x_test), 9, 70, 60)
 
 
 
