@@ -5,6 +5,8 @@ from sources.starter_code import *
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.tree import export_graphviz
+import graphviz
 
 # Reading dataset
 x_train = read_lines("../data/digitdata/trainingimages", 28)
@@ -25,10 +27,9 @@ def criterion():
         'entropy': 0,
     }
     for criterion in scores.keys():
-        model = DecisionTreeClassifier(criterion=criterion)
+        model = DecisionTreeClassifier(criterion=criterion,random_state=0)
         model.fit(flat_x_train, y_train)
         scores[criterion] = accuracy_score(model.predict(flat_x_test), y_test)
-
     # creating the bar plot
     fig = plt.figure()
     plt.bar(scores.keys(), scores.values(),width=0.15,align='edge')
@@ -38,33 +39,37 @@ def criterion():
     plt.xlabel("criterion")
     plt.ylabel("accuracy")
     plt.title("accuracy for each criterion")
+    max_key = max(scores, key=scores.get)
+    print(f"The criterion which maximizes the accuracy is: {max_key}")
     plt.show()
+    return max_key
 
 # Choose the second hyperparameter max depth
 def max_depth():
-    scores = {i:0 for i in range(5,21)}
-    depth=range(5,21)
+    scores = {i:0 for i in range(2,21)}
+    depth=range(2,21)
     for maxdepth in depth:
-        model = DecisionTreeClassifier(max_depth=maxdepth)
+        model = DecisionTreeClassifier(max_depth=maxdepth,random_state=0)
         model.fit(flat_x_train, y_train)
         scores[maxdepth] = accuracy_score(model.predict(flat_x_test), y_test)
 
-        # creating the bar plot
-
+    # creating the bar plot
     fig = plt.figure()
     plt.plot(scores.keys(), scores.values())
     plt.xlabel("max depth")
     plt.ylabel("accuracy")
     plt.title("Accuracy for each max depth")
-    print(scores)
+    max_key = max(scores, key=scores.get)
+    print(f"The max depth value which maximizes the accuracy is: {max_key}")
     plt.show()
+    return max_key
 
 
 def min_samples_split():
     scores = {i:0 for i in range(2,50)}
     samplessplit=range(2,50)
     for minsamplessplit in samplessplit:
-        model = DecisionTreeClassifier(min_samples_split=minsamplessplit)
+        model = DecisionTreeClassifier(min_samples_split=minsamplessplit,random_state=0)
         model.fit(flat_x_train, y_train)
         scores[minsamplessplit] = accuracy_score(model.predict(flat_x_test), y_test)
 
@@ -73,15 +78,17 @@ def min_samples_split():
     plt.xlabel("min samples split")
     plt.ylabel("accuracy")
     plt.title("Accuracy for each min samples split")
-    print(scores)
+    max_key = max(scores, key=scores.get)
+    print(f"The min samples split value which maximizes the accuracy is: {max_key}")
     plt.show()
+    return max_key
 
 
 def min_samples_leaf():
     scores = {i:0 for i in range(1,50)}
     samplesleaf=range(1,50)
     for minsamplesleaf in samplesleaf:
-        model = DecisionTreeClassifier(min_samples_leaf=minsamplesleaf)
+        model = DecisionTreeClassifier(min_samples_leaf=minsamplesleaf,random_state=0)
         model.fit(flat_x_train, y_train)
         scores[minsamplesleaf] = accuracy_score(model.predict(flat_x_test), y_test)
 
@@ -90,14 +97,16 @@ def min_samples_leaf():
     plt.xlabel("min samples leaf")
     plt.ylabel("accuracy")
     plt.title("Accuracy for each min samples leaf")
-    print(scores)
+    max_key = max(scores, key=scores.get)
+    print(f"The min samples leaf value which maximizes the accuracy is: {max_key}")
     plt.show()
+    return max_key
 
 def max_leaf_nodes():
     scores = {i:0 for i in range(2,100)}
     leafnodes=range(2,200)
     for maxleaf in leafnodes:
-        model = DecisionTreeClassifier(max_leaf_nodes=maxleaf)
+        model = DecisionTreeClassifier(max_leaf_nodes=maxleaf,random_state=0)
         model.fit(flat_x_train, y_train)
         scores[maxleaf] = accuracy_score(model.predict(flat_x_test), y_test)
 
@@ -106,48 +115,29 @@ def max_leaf_nodes():
     plt.xlabel("max leaf nodes")
     plt.ylabel("accuracy")
     plt.title("Accuracy for each max leaf nodes")
-    print(scores)
+    max_key = max(scores, key=scores.get)
+    print(f"The max leaf nodes value which maximizes the accuracy is: {max_key}")
     plt.show()
+    return max_key
 
 
 
-def comination():
-    # Create the parameter grid
-    param_grid = {
-        'max_depth': [5, 10, 15, 20],
-        'min_samples_split': [2, 5, 10],
-        'min_samples_leaf': [1, 2, 4],
-        'max_leaf_nodes': [10, 20, 30]
-    }
+def combination():
+    model = DecisionTreeClassifier(min_samples_split=4, criterion='gini', random_state=0, min_samples_leaf=1)
+    model.fit(flat_x_train, y_train)
+    print("accuracy:", accuracy_score(model.predict(flat_x_test), y_test))
+    return model
 
-    # Create the decision tree model
-    dt = DecisionTreeClassifier()
 
-    # Create the grid search object
-    grid_search = GridSearchCV(estimator=dt, param_grid=param_grid, cv=5)
-
-    # Fit the grid search to the data
-    grid_search.fit(flat_x_train, y_train)
-
-    # Print the best parameters
-    print(grid_search.best_params_)
-
+def visualize_tree():
+    model=combination()
+    dot_data = export_graphviz(model, filled=True,out_file=None)
+    graph = graphviz.Source(dot_data,format="pdf")
+    graph
+    graph.render("decision_tree_graphivz")
 
 def main():
-    # best
-    #criterion=gini
-    # max depth=15
-    # min samples split=3
-    #  min samples leaf=1
-    #max leaf nodes =191
-   #  {'max_depth': 10, 'max_leaf_nodes': 30, 'min_samples_leaf': 1, 'min_samples_split': 2}
-
-    model = DecisionTreeClassifier(max_depth=10, max_leaf_nodes=30, min_samples_leaf=1, min_samples_split=2)
-    model.fit(flat_x_train,y_train)
-    print(accuracy_score(y_test,model.predict(flat_x_test)))
-
-
-
+    combination()
 
 
 if __name__ == '__main__':
