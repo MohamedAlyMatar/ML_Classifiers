@@ -36,3 +36,6 @@ svc.fit(X_train_std, y_train)
 y_predict = svc.predict(X_test_std)
 # Measure Accuracy
 print("Accuracy score %.3f" % metrics.accuracy_score(y_test, y_predict))
+
+# visualize first 9
+visualize(x_test, y_predict, 9, 70, 60)
