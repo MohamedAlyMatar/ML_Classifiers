@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+
 from sources.starter_code import *
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
@@ -139,8 +141,15 @@ def visualize_tree():
     graph
     graph.render("decision_tree_graphivz_faces")
 
+def randomforest():
+
+    model=RandomForestClassifier(random_state=0)
+    model.fit(flat_x_train,y_train)
+    print("accuracy:", accuracy_score(model.predict(flat_x_test), y_test))
+
+
 def main():
-    visualize_tree()
+    randomforest()
 
 
 

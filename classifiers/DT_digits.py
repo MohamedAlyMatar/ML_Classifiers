@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import export_graphviz
 import graphviz
-
+from sklearn.ensemble import RandomForestClassifier
 # Reading dataset
 x_train = read_lines("../data/digitdata/trainingimages", 28)
 y_train = read_labels("../data/digitdata/traininglabels")
@@ -136,8 +136,19 @@ def visualize_tree():
     graph
     graph.render("decision_tree_graphivz")
 
+def randomforest():
+
+    model=RandomForestClassifier(n_estimators=200,random_state=0)
+    model.fit(flat_x_train,y_train)
+    print("accuracy:", accuracy_score(model.predict(flat_x_test), y_test))
+
+
+
+
+
+
 def main():
-    combination()
+    randomforest()
 
 
 if __name__ == '__main__':
